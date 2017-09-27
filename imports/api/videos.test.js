@@ -6,6 +6,7 @@ import { Videos } from './videos.js';
 var fs = require('fs');
 var path = require('path');
 
+
 if (Meteor.isServer) {
   describe('Videos', () => {
     describe('methods', () => {
@@ -16,17 +17,20 @@ if (Meteor.isServer) {
 
       it('can insert video', function() {
         // Build path to sample file
-        console.log('__dirname=', __dirname);
-        console.log('resolve(.)', path.resolve('.'));
-        console.log('path.resolve(__dirname)=', path.resolve(__dirname));
-        var sampleFile = path.join(__dirname, '..', '..', 'tests', 'data') + 'sample.webm';
-        console.log('sampleFile=', sampleFile);
-
+        var sampleFile = path.join(Meteor.settings.test.dataPath, 'sample.webm');
 
         // Get file obj
         fs.open(sampleFile, 'r', function(err, fd) {
           if (fd) {
-            console.log('cool, got the fd')
+            console.log('opened file')
+            console.log('Videos=', Videos);
+            const video = Videos.insert({
+              file: sampleFile,
+              onError: function() { console.log('errr!')},
+              onStart: function() { console.log('started!')}
+            }, true)
+            console.log('video', video)
+            console.log('after')
           }
 
           if (err) {
