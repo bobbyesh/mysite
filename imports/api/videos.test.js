@@ -1,35 +1,39 @@
-import { Meteor } from 'meteor/meteor';
-import { resetDatabase } from 'meteor/xolvio:cleaner';
+import {Meteor} from 'meteor/meteor';
+import {resetDatabase} from 'meteor/xolvio:cleaner';
 
-import { Videos } from './videos.js';
+import {Videos} from './videos.js';
 
-var fs = require('fs');
-var path = require('path');
+let fs = require('fs');
+let path = require('path');
 
 
 if (Meteor.isServer) {
   describe('Videos', () => {
     describe('methods', () => {
 
-      beforeEach(function() {
+      beforeEach(function () {
         resetDatabase()
       });
 
-      it('can insert video', function() {
+      it('can insert video', function () {
         // Build path to sample file
-        var sampleFile = path.join(Meteor.settings.test.dataPath, 'sample.webm');
+        const sampleFile = path.join(Meteor.settings.test.dataPath, 'sample.webm');
 
         // Get file obj
-        fs.open(sampleFile, 'r', function(err, fd) {
+        fs.open(sampleFile, 'r', function (err, fd) {
           if (fd) {
-            console.log('opened file')
+            console.log('opened file');
             console.log('Videos=', Videos);
             const video = Videos.insert({
               file: sampleFile,
-              onError: function() { console.log('errr!')},
-              onStart: function() { console.log('started!')}
-            }, true)
-            console.log('video', video)
+              onError: function () {
+                console.log('errr!')
+              },
+              onStart: function () {
+                console.log('started!')
+              }
+            }, true);
+            console.log('video', video);
             console.log('after')
           }
 
@@ -40,7 +44,6 @@ if (Meteor.isServer) {
         // Insert video
         // Check that db contains that video
       })
-
     })
   })
 }
